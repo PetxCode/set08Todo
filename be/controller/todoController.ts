@@ -16,7 +16,6 @@ export const createTodo = async (
     // let newTime = timer * 86400000;
 
     let time = new Date().getTime() + newTime;
-    console.log("time: ", time);
 
     let createdAt = moment(new Date().getTime()).format("LLL");
     let achievedAt = moment(time).format("LLL");
@@ -24,7 +23,6 @@ export const createTodo = async (
 
     let todo: any = new todoModel(task, achieved, createdAt, achievedAt);
 
-    console.log(achievedAt);
     let timmer = setTimeout(async () => {
       await db.updateOne(
         { _id: new ObjectId(todo._id) },
@@ -96,7 +94,6 @@ export const updateTodo = async (
     await client.connect();
 
     const { todoID } = req.params;
-    const { done } = req.body;
 
     let findTodo: any = await db.findOne({ _id: new ObjectId(todoID) });
 
@@ -107,7 +104,7 @@ export const updateTodo = async (
     } else {
       let todo = await db.updateOne(
         { _id: new ObjectId(todoID) },
-        { $set: { done } }
+        { $set: { done: true } }
       );
       return res.status(201).json({
         message: "updating todo",
